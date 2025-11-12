@@ -8,6 +8,9 @@
  * - API_KEY: API Ninjas authentication key
  */
 
+// Polyfill fetch for older Node versions (Vercel uses Node 18+ which has built-in fetch)
+const fetch = globalThis.fetch || require('node-fetch');
+
 // Company mapping for ticker symbols
 const COMPANIES = {
   'AAPL': 'Apple Inc.',
@@ -50,7 +53,7 @@ async function fetchStockPrice(ticker, apiKey) {
  * Main serverless function handler
  * Fetches stock prices for all tracked companies
  */
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Set CORS headers for cross-origin requests
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
