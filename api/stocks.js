@@ -1,7 +1,7 @@
 /**
  * Serverless Function: Stock Price API
  *
- * Fetches real-time stock prices from API Ninjas for major tech competitors
+ * Fetches real-time stock prices from API Ninjas for major banking institutions
  * Deployed on Vercel as a serverless function
  *
  * Required Environment Variable:
@@ -11,13 +11,32 @@
 // Polyfill fetch for older Node versions (Vercel uses Node 18+ which has built-in fetch)
 const fetch = globalThis.fetch || require('node-fetch');
 
-// Company mapping for ticker symbols
+// Company mapping for ticker symbols - Major Banking Institutions
 const COMPANIES = {
-  'AAPL': 'Apple Inc.',
-  'MSFT': 'Microsoft Corporation',
-  'GOOGL': 'Alphabet Inc. (Google)',
-  'META': 'Meta Platforms Inc.',
-  'AMZN': 'Amazon.com Inc.'
+  'JPM': 'JPMorgan Chase & Co.',
+  'BAC': 'Bank of America Corporation',
+  'C': 'Citigroup Inc.',
+  'WFC': 'Wells Fargo & Company',
+  'ICBC': 'Industrial and Commercial Bank of China'
+};
+
+// Economic indicators - Interest rates (updated as of Nov 2024)
+// Note: These should be updated periodically for accuracy
+const ECONOMIC_INDICATORS = {
+  usa: {
+    country: 'United States',
+    interestRate: 5.50,
+    rateType: 'Federal Funds Rate',
+    lastUpdated: '2024-11-01',
+    currency: 'USD'
+  },
+  china: {
+    country: 'China',
+    interestRate: 3.45,
+    rateType: 'Loan Prime Rate (1Y)',
+    lastUpdated: '2024-11-01',
+    currency: 'CNY'
+  }
 };
 
 /**
@@ -96,7 +115,8 @@ module.exports = async function handler(req, res) {
     const responseData = {
       success: true,
       timestamp: new Date().toISOString(),
-      data: stocks
+      data: stocks,
+      economicIndicators: ECONOMIC_INDICATORS
     };
 
     // Return successful response

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Business Intelligence Dashboard tracking real-time stock performance of major technology companies">
-    <meta property="og:title" content="Competitive Intelligence Dashboard - Technology Sector">
-    <meta property="og:description" content="Real-time stock analysis for Apple, Microsoft, Google, Meta, and Amazon">
+    <meta name="description" content="Business Intelligence Dashboard tracking real-time stock performance of major banking institutions">
+    <meta property="og:title" content="Competitive Intelligence Dashboard - Banking Sector">
+    <meta property="og:description" content="Real-time stock analysis for JPMorgan Chase, Bank of America, Citigroup, Wells Fargo, and ICBC">
     <meta property="og:type" content="website">
-    <title>Competitive Intelligence Dashboard - Technology Sector</title>
+    <title>Competitive Intelligence Dashboard - Banking Sector</title>
 
     <style>
         /* === CSS Reset and Base Styles === */
@@ -302,6 +302,81 @@
             color: #64748b;
         }
 
+        /* === Economic Indicators Section === */
+        .economic-indicators {
+            padding: 30px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        .economic-indicators h2 {
+            color: #0f172a;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .indicators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .indicator-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #2563eb;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .indicator-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .indicator-card.china {
+            border-left-color: #dc2626;
+        }
+
+        .indicator-country {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .indicator-rate {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .indicator-card.china .indicator-rate {
+            color: #dc2626;
+        }
+
+        .indicator-type {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .indicator-updated {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
         /* === Responsive Design === */
         @media (max-width: 768px) {
             .header h1 {
@@ -361,7 +436,7 @@
         <!-- Header Section -->
         <header class="header">
             <h1>Competitive Intelligence Dashboard</h1>
-            <p class="subtitle">Technology Sector Stock Analysis</p>
+            <p class="subtitle">Banking Sector Stock Analysis</p>
         </header>
 
         <!-- Control Bar -->
@@ -379,6 +454,11 @@
             </div>
         </div>
 
+        <!-- Economic Indicators Section -->
+        <div class="economic-indicators" id="economicIndicators">
+            <!-- Economic data will be inserted here -->
+        </div>
+
         <!-- Content Area -->
         <div class="content" id="content">
             <!-- Dynamic content will be inserted here -->
@@ -388,6 +468,7 @@
     <script>
         // Global variables
         let stockData = null;
+        let economicIndicators = null;
 
         /**
          * Fetches stock data from the serverless API
@@ -426,9 +507,13 @@
 
                 // Store data globally for export
                 stockData = result.data;
+                economicIndicators = result.economicIndicators;
 
                 // Update timestamp
                 updateTimestamp(result.timestamp);
+
+                // Render economic indicators
+                renderEconomicIndicators(economicIndicators);
 
                 // Render the stock table
                 renderStockTable(stockData);
@@ -497,6 +582,41 @@
         }
 
         /**
+         * Renders the economic indicators section
+         * @param {Object} indicators - Economic indicators data
+         */
+        function renderEconomicIndicators(indicators) {
+            const indicatorsDiv = document.getElementById('economicIndicators');
+
+            if (!indicators) {
+                indicatorsDiv.style.display = 'none';
+                return;
+            }
+
+            indicatorsDiv.style.display = 'block';
+
+            const indicatorsHTML = `
+                <h2>Economic Indicators</h2>
+                <div class="indicators-grid">
+                    <div class="indicator-card">
+                        <div class="indicator-country">🇺🇸 ${indicators.usa.country}</div>
+                        <div class="indicator-rate">${indicators.usa.interestRate}%</div>
+                        <div class="indicator-type">${indicators.usa.rateType}</div>
+                        <div class="indicator-updated">Last updated: ${indicators.usa.lastUpdated}</div>
+                    </div>
+                    <div class="indicator-card china">
+                        <div class="indicator-country">🇨🇳 ${indicators.china.country}</div>
+                        <div class="indicator-rate">${indicators.china.interestRate}%</div>
+                        <div class="indicator-type">${indicators.china.rateType}</div>
+                        <div class="indicator-updated">Last updated: ${indicators.china.lastUpdated}</div>
+                    </div>
+                </div>
+            `;
+
+            indicatorsDiv.innerHTML = indicatorsHTML;
+        }
+
+        /**
          * Updates the timestamp display
          * @param {string} timestamp - ISO timestamp string
          */
@@ -539,13 +659,26 @@
                 return;
             }
 
+            // Create CSV content with economic indicators
+            let csvContent = '';
+
+            // Add economic indicators section if available
+            if (economicIndicators) {
+                csvContent += 'ECONOMIC INDICATORS\n';
+                csvContent += 'Country,Interest Rate,Rate Type,Last Updated\n';
+                csvContent += `"${economicIndicators.usa.country}",${economicIndicators.usa.interestRate}%,"${economicIndicators.usa.rateType}",${economicIndicators.usa.lastUpdated}\n`;
+                csvContent += `"${economicIndicators.china.country}",${economicIndicators.china.interestRate}%,"${economicIndicators.china.rateType}",${economicIndicators.china.lastUpdated}\n`;
+                csvContent += '\n';
+            }
+
             // Find highest and lowest prices for the export
             const prices = stockData.map(s => s.price);
             const highestPrice = Math.max(...prices);
             const lowestPrice = Math.min(...prices);
 
-            // Create CSV content
-            let csvContent = 'Company,Ticker,Current Price,Change Indicator\n';
+            // Add stock data section
+            csvContent += 'BANKING SECTOR STOCKS\n';
+            csvContent += 'Company,Ticker,Current Price,Change Indicator\n';
 
             stockData.forEach(stock => {
                 const isHighest = stock.price === highestPrice;
@@ -562,7 +695,7 @@
 
             // Generate filename with current date
             const date = new Date();
-            const filename = `competitor-stocks-${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}.csv`;
+            const filename = `banking-sector-analysis-${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}.csv`;
 
             link.setAttribute('href', url);
             link.setAttribute('download', filename);
