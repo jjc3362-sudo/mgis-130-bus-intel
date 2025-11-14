@@ -337,6 +337,188 @@
             }
         }
 
+        /* === Tab Navigation === */
+        .tab-navigation {
+            background: #f1f5f9;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 0;
+            display: flex;
+            gap: 0;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 18px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            position: relative;
+        }
+
+        .tab-button:hover {
+            background: #e2e8f0;
+            color: #334155;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #2563eb;
+            border-bottom: 3px solid #2563eb;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* === Transcript Display === */
+        .transcript-container {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .transcript-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .transcript-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+
+        .transcript-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .transcript-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .transcript-meta-item strong {
+            color: #334155;
+        }
+
+        .transcript-text {
+            line-height: 1.8;
+            color: #334155;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .participants-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .participants-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 15px;
+        }
+
+        .participant-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .participant-item {
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .participant-name {
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .participant-role {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .earnings-form {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .form-field {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.9rem;
+        }
+
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: #1e293b;
+            background: white;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
         /* === Accessibility === */
         button:focus,
         a:focus {
@@ -364,30 +546,116 @@
             <p class="subtitle">Technology Sector Stock Analysis</p>
         </header>
 
-        <!-- Control Bar -->
-        <div class="controls">
-            <div class="timestamp" id="timestamp">
-                Last updated: Never
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-button active" onclick="switchTab('stocks')" id="tab-stocks">
+                📈 Stock Prices
+            </button>
+            <button class="tab-button" onclick="switchTab('earnings')" id="tab-earnings">
+                📄 Earnings Transcripts
+            </button>
+        </div>
+
+        <!-- Stock Prices Tab -->
+        <div id="stocks-tab" class="tab-content active">
+            <!-- Control Bar -->
+            <div class="controls">
+                <div class="timestamp" id="timestamp">
+                    Last updated: Never
+                </div>
+                <div class="button-group">
+                    <button class="btn-refresh" id="refreshBtn" onclick="fetchStockData()">
+                        <span>🔄</span> Refresh Data
+                    </button>
+                    <button class="btn-export" id="exportBtn" onclick="exportToCSV()">
+                        <span>📊</span> Export to CSV
+                    </button>
+                </div>
             </div>
-            <div class="button-group">
-                <button class="btn-refresh" id="refreshBtn" onclick="fetchStockData()">
-                    <span>🔄</span> Refresh Data
-                </button>
-                <button class="btn-export" id="exportBtn" onclick="exportToCSV()">
-                    <span>📊</span> Export to CSV
-                </button>
+
+            <!-- Content Area -->
+            <div class="content" id="content">
+                <!-- Dynamic content will be inserted here -->
             </div>
         </div>
 
-        <!-- Content Area -->
-        <div class="content" id="content">
-            <!-- Dynamic content will be inserted here -->
+        <!-- Earnings Transcripts Tab -->
+        <div id="earnings-tab" class="tab-content">
+            <!-- Control Bar -->
+            <div class="controls">
+                <div class="timestamp" id="earnings-timestamp">
+                    Last updated: Never
+                </div>
+                <div class="button-group">
+                    <button class="btn-refresh" id="fetchEarningsBtn" onclick="fetchEarningsData()">
+                        <span>🔄</span> Fetch Transcript
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Form -->
+            <div class="content">
+                <div class="earnings-form">
+                    <div class="form-group">
+                        <div class="form-field">
+                            <label for="ticker-input">Ticker Symbol</label>
+                            <input type="text" id="ticker-input" placeholder="e.g., MSFT" value="MSFT">
+                        </div>
+                        <div class="form-field">
+                            <label for="year-input">Year</label>
+                            <input type="number" id="year-input" placeholder="e.g., 2024" value="2024" min="2000" max="2025">
+                        </div>
+                        <div class="form-field">
+                            <label for="quarter-input">Quarter</label>
+                            <select id="quarter-input">
+                                <option value="1">Q1</option>
+                                <option value="2" selected>Q2</option>
+                                <option value="3">Q3</option>
+                                <option value="4">Q4</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings Content Area -->
+                <div id="earnings-content">
+                    <!-- Dynamic earnings content will be inserted here -->
+                    <div style="text-align: center; padding: 60px 20px; color: #64748b;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">📄</div>
+                        <div style="font-size: 1.2rem; font-weight: 500;">Select a ticker and click "Fetch Transcript" to view earnings call data</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         // Global variables
         let stockData = null;
+        let earningsData = null;
+        let currentTab = 'stocks';
+
+        /**
+         * Switches between tabs
+         * @param {string} tabName - Name of tab to switch to ('stocks' or 'earnings')
+         */
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+
+            currentTab = tabName;
+        }
 
         /**
          * Fetches stock data from the serverless API
@@ -571,6 +839,171 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        /**
+         * Fetches earnings call transcript data from the API
+         * Displays loading state and handles errors
+         */
+        async function fetchEarningsData() {
+            const contentDiv = document.getElementById('earnings-content');
+            const fetchBtn = document.getElementById('fetchEarningsBtn');
+            const ticker = document.getElementById('ticker-input').value.toUpperCase().trim();
+            const year = document.getElementById('year-input').value;
+            const quarter = document.getElementById('quarter-input').value;
+
+            if (!ticker) {
+                alert('Please enter a ticker symbol');
+                return;
+            }
+
+            // Show loading state
+            contentDiv.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Fetching earnings transcript for ${ticker}...</div>
+                </div>
+            `;
+
+            // Disable button during loading
+            fetchBtn.disabled = true;
+
+            try {
+                // Fetch data from API endpoint
+                const response = await fetch(`/api/earnings?ticker=${ticker}&year=${year}&quarter=${quarter}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.message || 'Failed to fetch earnings data');
+                }
+
+                // Store data globally
+                earningsData = result.data;
+
+                // Update timestamp
+                updateEarningsTimestamp(result.timestamp);
+
+                // Render the transcript
+                renderEarningsTranscript(earningsData);
+
+            } catch (error) {
+                console.error('Error fetching earnings data:', error);
+                showEarningsError(error.message);
+            } finally {
+                // Re-enable button
+                fetchBtn.disabled = false;
+            }
+        }
+
+        /**
+         * Renders the earnings call transcript
+         * @param {Object} data - Earnings transcript data
+         */
+        function renderEarningsTranscript(data) {
+            const contentDiv = document.getElementById('earnings-content');
+
+            // Format date
+            const date = new Date(data.date);
+            const formattedDate = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Build participants HTML
+            let participantsHTML = '';
+            if (data.participants && data.participants.length > 0) {
+                // Filter out the "..." placeholder
+                const validParticipants = data.participants.filter(p =>
+                    typeof p === 'object' && p.name && p.name !== '...'
+                );
+
+                if (validParticipants.length > 0) {
+                    participantsHTML = `
+                        <div class="participants-section">
+                            <h3 class="participants-title">Participants</h3>
+                            <div class="participant-list">
+                                ${validParticipants.map(p => `
+                                    <div class="participant-item">
+                                        <div class="participant-name">${p.name}</div>
+                                        <div class="participant-role">${p.role}${p.company ? ` - ${p.company}` : ''}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Build transcript HTML
+            const transcriptHTML = `
+                <div class="transcript-container">
+                    <div class="transcript-header">
+                        <h2 class="transcript-title">${data.ticker} - Q${data.quarter} ${data.year} Earnings Call</h2>
+                        <div class="transcript-meta">
+                            <div class="transcript-meta-item">
+                                <strong>Date:</strong> ${formattedDate}
+                            </div>
+                            <div class="transcript-meta-item">
+                                <strong>Ticker:</strong> ${data.ticker}
+                            </div>
+                            <div class="transcript-meta-item">
+                                <strong>Quarter:</strong> Q${data.quarter} ${data.year}
+                            </div>
+                            ${data.earnings_timing ? `
+                                <div class="transcript-meta-item">
+                                    <strong>Timing:</strong> ${data.earnings_timing.replace('_', ' ')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; font-weight: 600; color: #0f172a; margin-bottom: 15px;">Transcript</h3>
+                        <div class="transcript-text">${data.transcript || 'No transcript available'}</div>
+                    </div>
+                    ${participantsHTML}
+                </div>
+            `;
+
+            contentDiv.innerHTML = transcriptHTML;
+        }
+
+        /**
+         * Updates the earnings timestamp display
+         * @param {string} timestamp - ISO timestamp string
+         */
+        function updateEarningsTimestamp(timestamp) {
+            const timestampDiv = document.getElementById('earnings-timestamp');
+            const date = new Date(timestamp);
+            const formattedTime = date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            timestampDiv.textContent = `Last updated: ${formattedTime}`;
+        }
+
+        /**
+         * Displays error message for earnings tab
+         * @param {string} message - Error message to display
+         */
+        function showEarningsError(message) {
+            const contentDiv = document.getElementById('earnings-content');
+            contentDiv.innerHTML = `
+                <div class="error">
+                    <div class="error-icon">⚠️</div>
+                    <div class="error-title">Unable to load earnings data</div>
+                    <div class="error-message">${message || 'Please try again with different parameters.'}</div>
+                </div>
+            `;
         }
 
         /**
