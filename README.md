@@ -8,20 +8,27 @@ A professional business intelligence dashboard for tracking real-time stock perf
 
 ## 🎯 Overview
 
-This dashboard provides real-time competitive intelligence by tracking stock prices for major technology sector leaders:
+This dashboard provides comprehensive competitive intelligence with two powerful features:
 
+### 📈 Stock Prices Tab
+Real-time stock price tracking for major technology sector leaders:
 - **Apple Inc.** (AAPL)
 - **Microsoft Corporation** (MSFT)
 - **Alphabet Inc. / Google** (GOOGL)
 - **Meta Platforms Inc.** (META)
 - **Amazon.com Inc.** (AMZN)
 
+### 📄 Earnings Transcripts Tab
+Access earnings call transcripts for any public company by ticker, year, and quarter
+
 ## ✨ Features
 
 ### Core Functionality
 - ✅ **Real-time Stock Data**: Live stock prices via API Ninjas integration
+- ✅ **Earnings Transcripts**: View full earnings call transcripts for any public company
+- ✅ **Tab Navigation**: Easy switching between stock prices and earnings data
 - ✅ **Visual Indicators**: Automatic highlighting of highest (green) and lowest (red) prices
-- ✅ **One-Click Export**: Download data as CSV for reports and presentations
+- ✅ **One-Click Export**: Download stock data as CSV for reports and presentations
 - ✅ **Auto-Refresh**: Manual refresh button for latest market data
 - ✅ **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 
@@ -75,7 +82,7 @@ Set the following environment variable in your Vercel project:
 
 | Variable | Description | Where to Get |
 |----------|-------------|--------------|
-| `API_KEY` | API Ninjas authentication key | [api-ninjas.com/api/stockprice](https://api-ninjas.com/api/stockprice) |
+| `API_KEY` | API Ninjas authentication key (for both stock prices and earnings transcripts) | [api-ninjas.com](https://api-ninjas.com/) |
 
 ### Setting Environment Variables in Vercel
 
@@ -117,8 +124,9 @@ Then open [http://localhost:3000](http://localhost:3000)
 ```
 mgis-130-bus-intel/
 ├── api/
-│   └── stocks.js          # Serverless function for stock data
-├── index.html             # Main dashboard frontend
+│   ├── stocks.js          # Serverless function for stock data
+│   └── earnings.js        # Serverless function for earnings transcripts
+├── index.html             # Main dashboard frontend with tab navigation
 ├── vercel.json            # Vercel deployment configuration
 ├── .env.example           # Environment variable template
 ├── .gitignore             # Git ignore rules
@@ -134,36 +142,60 @@ mgis-130-bus-intel/
 - **WCAG AA compliant** - Accessible to all users
 - **CSV export functionality** - Download data for external analysis
 
-### Backend (`/api/stocks.js`)
+### Backend Serverless Functions
+#### `/api/stocks.js`
 - **Vercel Serverless Function** - Node.js runtime
 - **Parallel API calls** - Fetches all stocks simultaneously using `Promise.all()`
 - **Error handling** - Comprehensive try-catch blocks
 - **CORS enabled** - Cross-origin resource sharing configured
 - **Environment variables** - Secure API key management
 
+#### `/api/earnings.js`
+- **Earnings transcript fetching** - Query by ticker, year, and quarter
+- **Parameter validation** - Ensures required parameters are provided
+- **Dynamic queries** - Supports any public company ticker
+- **Same security model** - Uses same API key and CORS configuration
+
 ### API Integration
-- **Provider**: API Ninjas Stock Price API
-- **Endpoint**: `https://api.api-ninjas.com/v1/stockprice`
+- **Provider**: API Ninjas
+- **Endpoints**:
+  - Stock Price API: `https://api.api-ninjas.com/v1/stockprice`
+  - Earnings Call API: `https://api.api-ninjas.com/v1/earningscall`
 - **Authentication**: Header-based (`X-Api-Key`)
 - **Rate Limits**: Depends on your API Ninjas plan
 
 ## 📊 Dashboard Features
 
-### Data Display
+### Stock Prices Tab
+
+#### Data Display
 - **Company Name**: Full corporate name
 - **Ticker Symbol**: Stock exchange ticker
 - **Current Price**: Real-time price in USD (2 decimal places)
 - **Change Indicator**: Visual indicator showing highest/lowest/mid-range
 
-### Interactive Controls
+#### Interactive Controls
 - **Refresh Data**: Fetch latest stock prices
 - **Export to CSV**: Download data in spreadsheet format
 - **Timestamp**: Shows when data was last updated
 
-### Visual Indicators
+#### Visual Indicators
 - 🟢 **Green Border**: Highest price among tracked stocks
 - 🔴 **Red Border**: Lowest price among tracked stocks
 - ⚫ **Neutral**: Mid-range prices
+
+### Earnings Transcripts Tab
+
+#### Search Functionality
+- **Ticker Input**: Enter any stock ticker symbol (e.g., MSFT, AAPL, TSLA)
+- **Year Selector**: Choose the year of the earnings call (2000-2025)
+- **Quarter Selector**: Select Q1, Q2, Q3, or Q4
+
+#### Transcript Display
+- **Full Transcript Text**: Complete earnings call transcript with scrollable view
+- **Metadata**: Date, ticker, quarter, and timing information
+- **Participants List**: Grid display of all call participants with roles and companies
+- **Formatted Layout**: Professional presentation with clear sections
 
 ## 🎨 Design Philosophy
 
